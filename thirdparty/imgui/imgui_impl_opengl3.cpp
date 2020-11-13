@@ -14,8 +14,8 @@
 //  2018-11-30: Misc: Setting up io.BackendRendererName so it can be displayed in the About Window.
 //  2018-11-13: OpenGL: Support for GL 4.5's glClipControl(GL_UPPER_LEFT).
 //  2018-08-29: OpenGL: Added support for more OpenGL loaders: glew and glad, with comments indicative that any loader can be used.
-//  2018-08-09: OpenGL: Default to OpenGL ES 3 on iOS and Android. GLSL version default to "#version 300 ES".
-//  2018-07-30: OpenGL: Support for GLSL 300 ES and 410 core. Fixes for Emscripten compilation.
+//  2018-08-09: OpenGL: Default to OpenGL ES 3 on iOS and Android. GLSL version default to "#version 410 core".
+//  2018-07-30: OpenGL: Support for GLSL 410 core and 410 core. Fixes for Emscripten compilation.
 //  2018-07-10: OpenGL: Support for more GLSL versions (based on the GLSL version string). Added error output when shaders fail to compile/link.
 //  2018-06-08: Misc: Extracted imgui_impl_opengl3.cpp/.h away from the old combined GLFW/SDL+OpenGL3 examples.
 //  2018-06-08: OpenGL: Use draw_data->DisplayPos and draw_data->DisplaySize to setup projection matrix and clipping rectangle.
@@ -46,7 +46,7 @@
 //  4.2       420
 //  4.3       430
 //  ES 2.0    100       "#version 100"
-//  ES 3.0    300       "#version 300 es"
+//  ES 3.0    300       "#version 410 core"
 //----------------------------------------
 
 #if defined(_MSC_VER) && !defined(_CRT_SECURE_NO_WARNINGS)
@@ -66,7 +66,7 @@
 #endif
 
 // iOS, Android and Emscripten can use GL ES 3
-// Call ImGui_ImplOpenGL3_Init() with "#version 300 es"
+// Call ImGui_ImplOpenGL3_Init() with "#version 410 core"
 #if (defined(__APPLE__) && TARGET_OS_IOS) || (defined(__ANDROID__)) || (defined(__EMSCRIPTEN__))
 #define USE_GL_ES3
 #endif
@@ -107,7 +107,7 @@ bool    ImGui_ImplOpenGL3_Init(const char* glsl_version)
     // Store GLSL version string so we can refer to it later in case we recreate shaders. Note: GLSL version is NOT the same as GL version. Leave this to NULL if unsure.
 #ifdef USE_GL_ES3
     if (glsl_version == NULL)
-        glsl_version = "#version 300 es";
+        glsl_version = "#version 410 core";
 #else
     if (glsl_version == NULL)
         glsl_version = "#version 130";

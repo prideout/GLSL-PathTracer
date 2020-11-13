@@ -1,14 +1,13 @@
 cmake_minimum_required (VERSION 2.8)
 project (PathTracer)
 
-SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON) 
-
-set(CMAKE_CONFIGURATION_TYPES "Debug;Release;RelWithDebInfo" CACHE STRING "Configuration types" FORCE)
-
-SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMake")
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+#find_package(glfw3 REQUIRED PATHS /usr/local/Cellar/glfw/3.3.2/lib/cmake/glfw3)
+find_package(SDL2 REQUIRED PATHS /usr/local/Cellar/sdl2/2.0.12_1/lib/cmake/SDL2)
+find_package(OpenGL)
+find_library(COCOA_LIBRARY Cocoa)
 
 file(GLOB_RECURSE SHADERS
     ${CMAKE_SOURCE_DIR}/src/shaders/*.glsl
@@ -24,37 +23,27 @@ file(GLOB EXT_FILES
     ${CMAKE_SOURCE_DIR}/thirdparty/imgui/*.h
     ${CMAKE_SOURCE_DIR}/thirdparty/imgui/*.cpp
     ${CMAKE_SOURCE_DIR}/thirdparty/imguizmo/*.h
-    ${CMAKE_SOURCE_DIR}/thirdparty/imguizmo/*.cpp  
-    ${CMAKE_SOURCE_DIR}/thirdparty/RadeonRays/*.h 
-    ${CMAKE_SOURCE_DIR}/thirdparty/RadeonRays/*.cpp     
+    ${CMAKE_SOURCE_DIR}/thirdparty/imguizmo/*.cpp
+    ${CMAKE_SOURCE_DIR}/thirdparty/RadeonRays/*.h
+    ${CMAKE_SOURCE_DIR}/thirdparty/RadeonRays/*.cpp
     ${CMAKE_SOURCE_DIR}/thirdparty/gl3w/GL/*.c
 )
 
 set(SRCS ${SRC_FILES} ${EXT_FILES} ${SHADERS})
 
-set(SDL2_LIBRARIES "SDL2" "SDL2main")
-set(SDL2_INCLUDE_DIRS  ${CMAKE_SOURCE_DIR}/thirdparty/SDL2/include)
-set(SDL2_LIBDIR ${CMAKE_SOURCE_DIR}/thirdparty/SDL2/lib/x64)
-
 include_directories(
-  ${CMAKE_SOURCE_DIR}/src/core
-  ${CMAKE_SOURCE_DIR}/src/loaders
-  ${CMAKE_SOURCE_DIR}/src/tests
-  ${CMAKE_SOURCE_DIR}/src/math
-  ${CMAKE_SOURCE_DIR}/thirdparty/imgui
-  ${CMAKE_SOURCE_DIR}/thirdparty/glew/include
-  ${CMAKE_SOURCE_DIR}/thirdparty/stb
-  ${CMAKE_SOURCE_DIR}/thirdparty/gl3w
-  ${CMAKE_SOURCE_DIR}/thirdparty/imguizmo
-  ${CMAKE_SOURCE_DIR}/thirdparty/RadeonRays
-  ${CMAKE_SOURCE_DIR}/thirdparty/tinydir
-  ${SDL2_INCLUDE_DIRS}
+    ${CMAKE_SOURCE_DIR}/src/core
+    ${CMAKE_SOURCE_DIR}/src/loaders
+    ${CMAKE_SOURCE_DIR}/src/tests
+    ${CMAKE_SOURCE_DIR}/src/math
+    ${CMAKE_SOURCE_DIR}/thirdparty/imgui
+    ${CMAKE_SOURCE_DIR}/thirdparty/glew/include
+    ${CMAKE_SOURCE_DIR}/thirdparty/stb
+    ${CMAKE_SOURCE_DIR}/thirdparty/gl3w
+    ${CMAKE_SOURCE_DIR}/thirdparty/imguizmo
+    ${CMAKE_SOURCE_DIR}/thirdparty/RadeonRays
+    ${CMAKE_SOURCE_DIR}/thirdparty/tinydir
 )
-
-link_directories(
-  ${SDL2_LIBDIR}
-)
-find_package(OpenGL)
 
 foreach(f ${SRCS})
     # Get the path of the file relative to ${DIRECTORY},
@@ -70,27 +59,19 @@ foreach(f ${SRCS})
     source_group("${SRCGR}" FILES ${f})
 endforeach()
 
-if(WIN32)
-  set(GUI_TYPE WIN32)
-elseif(MACOSX)
-  set(GUI_TYPE MACOSX_BUNDLE)
-endif()
+set(EXE_NAME "PathTracer")
 
-if(MSVC)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
-endif()
+add_executable(${EXE_NAME} ${SRCS})
 
+target_include_directories(${EXE_NAME} PUBLIC ${SDL2_INCLUDE_DIRS})
 
-SET(LINK_OPTIONS " ")
-SET(EXE_NAME "PathTracer")
+target_link_directories(${EXE_NAME} PUBLIC ${SDL2_LIBDIR})
 
-ADD_EXECUTABLE(${EXE_NAME} ${SRCS})
-
-if(WIN32)
-TARGET_LINK_LIBRARIES(${EXE_NAME} ${OPENGL_LIBRARIES} ${SDL2_LIBRARIES})
-else()
-TARGET_LINK_LIBRARIES(${EXE_NAME} ${OPENGL_LIBRARIES} ${SDL2_LIBRARIES} dl)
-endif()
+target_link_libraries(${EXE_NAME} PUBLIC
+  ${OPENGL_LIBRARIES}
+  ${COCOA_LIBRARY}
+  SDL2
+)
 
 #--------------------------------------------------------------------
 # preproc
@@ -101,11 +82,13 @@ add_definitions(-DBX_CONFIG_ENABLE_MSVC_LEVEL4_WARNINGS=1)
 add_definitions(-D__STDC_LIMIT_MACROS)
 add_definitions(-D__STDC_CONSTANT_MACROS)
 add_definitions(-DIMGUI_DISABLE_OBSOLETE_FUNCTIONS)
+
 if(MSVC)
-add_definitions(-DWIN32)
-add_definitions(-D_WIN32)
-#add_definitions(-DNOMINMAX)
+  add_definitions(-DWIN32)
+  add_definitions(-D_WIN32)
+  #add_definitions(-DNOMINMAX)
 endif()
+
 add_definitions(-DUSE_DL_PREFIX)
 add_definitions(-DGLEW_STATIC)
 
@@ -119,21 +102,3 @@ set_target_properties(${EXE_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELWITHDEB
 set_target_properties(${EXE_NAME} PROPERTIES DEBUG_POSTFIX "_d")
 set_target_properties(${EXE_NAME} PROPERTIES RELWITHDEBINFO_POSTFIX "RelWithDebInfo")
 set_target_properties(${EXE_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
-
-if(WIN32)
-set_target_properties(${EXE_NAME} PROPERTIES LINK_FLAGS_DEBUG "/SUBSYSTEM:CONSOLE")
-set_target_properties(${EXE_NAME} PROPERTIES LINK_FLAGS_RELEASE "/SUBSYSTEM:CONSOLE")
-endif()
-
-#add_custom_command(TARGET ${EXE_NAME} POST_BUILD
-#    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/assets ${CMAKE_CURRENT_BINARY_DIR}/assets
-#)
-#add_custom_command(TARGET ${EXE_NAME} POST_BUILD
-#    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/src/shaders ${CMAKE_CURRENT_BINARY_DIR}/shaders
-#)
-
-if(WIN32)
-add_custom_command(TARGET ${EXE_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy ${SDL2_LIBDIR}/SDL2.dll ${CMAKE_CURRENT_BINARY_DIR}
-)
-endif()

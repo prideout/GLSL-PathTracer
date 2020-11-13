@@ -63,7 +63,7 @@ namespace GLSLPT
             throw std::runtime_error(msg.c_str());
         }
     }
-    
+
     GLuint Shader::getObject() const
     {
         return object;

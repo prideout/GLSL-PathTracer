@@ -27,7 +27,7 @@
  * SOFTWARE.
  */
 
-#version 300 es
+#version 410 core
 #define TILED
 
 precision highp float;

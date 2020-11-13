@@ -29,7 +29,7 @@
 
 #define _USE_MATH_DEFINES
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <GL/gl3w.h>
 
 #include <time.h>
@@ -62,11 +62,11 @@ float mouseSensitivity = 0.01f;
 bool keyPressed        = false;
 int sampleSceneIndex   = 0;
 int selectedInstance   = 0;
-double lastTime        = SDL_GetTicks(); 
+double lastTime        = SDL_GetTicks();
 bool done = false;
 
-std::string shadersDir = "../src/shaders/";
-std::string assetsDir = "../assets/";
+std::string shadersDir = "./src/shaders/";
+std::string assetsDir = "./assets/";
 
 RenderOptions renderOptions;
 
@@ -492,7 +492,7 @@ int main(int argc, char** argv)
     {
         MainLoop(&loopdata);
     }
-        
+
     delete renderer;
     delete scene;
 
