@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/quizgen/static/css/main.8dfc22f8.chunk.css",
+    "main.js": "/quizgen/static/js/main.3a810f29.chunk.js",
+    "main.js.map": "/quizgen/static/js/main.3a810f29.chunk.js.map",
+    "runtime-main.js": "/quizgen/static/js/runtime-main.159da54d.js",
+    "runtime-main.js.map": "/quizgen/static/js/runtime-main.159da54d.js.map",
+    "static/css/2.de8a3273.chunk.css": "/quizgen/static/css/2.de8a3273.chunk.css",
+    "static/js/2.f68a97a0.chunk.js": "/quizgen/static/js/2.f68a97a0.chunk.js",
+    "static/js/2.f68a97a0.chunk.js.map": "/quizgen/static/js/2.f68a97a0.chunk.js.map",
+    "index.html": "/quizgen/index.html",
+    "precache-manifest.1034d8af7effe04c5f776e82c761ba15.js": "/quizgen/precache-manifest.1034d8af7effe04c5f776e82c761ba15.js",
+    "service-worker.js": "/quizgen/service-worker.js",
+    "static/css/2.de8a3273.chunk.css.map": "/quizgen/static/css/2.de8a3273.chunk.css.map",
+    "static/css/main.8dfc22f8.chunk.css.map": "/quizgen/static/css/main.8dfc22f8.chunk.css.map",
+    "static/js/2.f68a97a0.chunk.js.LICENSE.txt": "/quizgen/static/js/2.f68a97a0.chunk.js.LICENSE.txt",
+    "static/media/birthday1.png": "/quizgen/static/media/birthday1.c10921d4.png",
+    "static/media/semantic.min.css": "/quizgen/static/media/outline-icons.ef60a4f6.woff"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.159da54d.js",
+    "static/css/2.de8a3273.chunk.css",
+    "static/js/2.f68a97a0.chunk.js",
+    "static/css/main.8dfc22f8.chunk.css",
+    "static/js/main.3a810f29.chunk.js"
+  ]
+}
